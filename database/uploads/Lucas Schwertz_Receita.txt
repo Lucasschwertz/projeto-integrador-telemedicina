@@ -1,0 +1,13 @@
+Tipo: Receita
+Paciente: Lucas Schwertz
+Medico: Lucas Schwertz
+
+Tipo: Atestado
+Paciente: Lucas Schwertz
+Médico: Dr. João Andrade CRM 123456/SC
+
+Atesto, para os devidos fins, que o(a) paciente acima identificado(a) foi atendido(a) nesta data em consulta médica e necessita de afastamento de suas atividades por 2 (dois) dias, a contar de hoje, por motivo de saúde.
+
+Data: 24/01/2026
+
+Assinatura: _________________________

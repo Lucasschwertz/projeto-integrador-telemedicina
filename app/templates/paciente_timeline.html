@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Timeline do paciente{% endblock %}
+{% block content %}
+<div class="section-card fade-up">
+  <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3">
+    <div>
+      <h2 class="mb-1">Timeline do paciente</h2>
+      <p class="text-muted mb-0">Linha do tempo com exames e documentos.</p>
+    </div>
+    <a href="{{ url_for('dashboard.dashboard_paciente') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+  </div>
+
+  {% if documentos %}
+    <div class="d-flex flex-column gap-3">
+      {% for doc in documentos %}
+        <div class="section-card">
+          <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+            <div>
+              <div class="fw-semibold">{{ doc['doc_type'] }}</div>
+              <small class="text-muted">Medico: {{ doc['doctor_name'] }} | {{ doc['created_at'] }}</small>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+              <span class="badge bg-light text-dark">Status: {{ doc['status'] }}</span>
+              <a href="{{ url_for('documentos.detalhe_documento', doc_id=doc['id']) }}" class="btn btn-outline-primary btn-sm">
+                Ver detalhes
+              </a>
+              <a href="{{ url_for('documentos.download_arquivo', nome_arquivo=doc['filename']) }}" class="btn btn-outline-secondary btn-sm">
+                Baixar
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted mb-0">Nenhum documento disponivel ainda.</p>
+  {% endif %}
+
+  <hr class="my-4">
+
+  <h4 class="card-title mb-3">Consultas</h4>
+  {% if consultas %}
+    <div class="list-group">
+      {% for c in consultas %}
+        <div class="list-group-item d-flex flex-column flex-md-row justify-content-between gap-2">
+          <div>
+            <div class="fw-semibold">{{ c['doctor_name'] }} - {{ c['tipo'] }}</div>
+            <small class="text-muted">{{ c['date'] }} {{ c['time'] }} | {{ c['status'] }}</small>
+          </div>
+          {% if c['status'] == 'confirmado' %}
+            <a href="{{ url_for('consulta.consulta', appointment_id=c['id']) }}" class="btn btn-outline-primary btn-sm">
+              Entrar na consulta
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted mb-0">Nenhuma consulta registrada.</p>
+  {% endif %}
+</div>
+{% endblock %}

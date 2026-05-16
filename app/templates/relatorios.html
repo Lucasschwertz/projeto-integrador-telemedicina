@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Relatorios{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Relatorios gerenciais</h2>
+      <form method="POST" class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Data inicial</label>
+          <input type="date" name="inicio" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Data final</label>
+          <input type="date" name="fim" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Medico</label>
+          <select name="medico" class="form-select">
+            <option value="">Todos</option>
+            {% for m in medicos %}
+              <option value="{{ m['nome'] }}">{{ m['nome'] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Tipo de documento</label>
+          <select name="tipo" class="form-select">
+            <option value="">Todos</option>
+            <option value="Laudo Medico">Laudo Medico</option>
+            <option value="Receita">Receita</option>
+            <option value="Atestado">Atestado</option>
+            <option value="Receita Assinada">Receita Assinada</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Pagamento</label>
+          <select name="pagamento" class="form-select">
+            <option value="">Todos</option>
+            <option value="pago">Pago</option>
+            <option value="nao_pago">Nao pago</option>
+          </select>
+        </div>
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <button type="submit" class="btn btn-primary">Gerar PDF</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

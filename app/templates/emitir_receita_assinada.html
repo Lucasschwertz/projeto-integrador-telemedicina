@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Emitir receita assinada{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Emitir receita assinada</h2>
+      <form method="POST" class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Paciente</label>
+          <input type="text" name="paciente" class="form-control" placeholder="Nome do paciente" required>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Conteudo da receita</label>
+          <textarea name="conteudo" rows="8" class="form-control" placeholder="Medicamentos, posologia e observacoes" required></textarea>
+        </div>
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <a href="{{ url_for('dashboard.dashboard_medico') }}" class="btn btn-outline-secondary">Voltar</a>
+          <button type="submit" class="btn btn-primary">Emitir receita</button>
+        </div>
+      </form>
+
+      {% if arquivo_gerado %}
+        <div class="mt-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+          <span class="text-muted">Receita gerada: {{ arquivo_gerado }}</span>
+          <a href="{{ url_for('documentos.download_arquivo', nome_arquivo=arquivo_gerado) }}" class="btn btn-outline-primary">
+            <i class="fas fa-download me-1"></i>Baixar receita
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

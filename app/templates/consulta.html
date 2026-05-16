@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Consulta{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="section-card fade-up d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <h2 class="mb-1">Consulta online</h2>
+        <p class="text-muted mb-0">
+          Medico: {{ agendamento['doctor_name'] }} | Paciente: {{ agendamento['patient_name'] }}
+        </p>
+        <small class="text-muted">Data: {{ agendamento['date'] }} {{ agendamento['time'] }} | Status: {{ agendamento['status'] }}</small>
+      </div>
+      {% if session.get('user_role', '')|lower == 'medico' and agendamento['status'] != 'realizada' %}
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{{ url_for('documentos.emitir_receita_assinada') }}">
+          Emitir receita assinada
+        </a>
+        <form method="POST" action="{{ url_for('consulta.encerrar_consulta', appointment_id=agendamento['id']) }}">
+          <button class="btn btn-outline-danger">Encerrar consulta</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="section-card">
+      <div id="jitsi-container" style="height: 520px;"></div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Chat da consulta</h4>
+      <div id="chat-messages" class="border rounded-3 p-2 mb-3" style="height: 360px; overflow-y: auto;"></div>
+      <div class="input-group">
+        <input type="text" id="chat-input" class="form-control" placeholder="Digite sua mensagem">
+        <button class="btn btn-primary" type="button" id="chat-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://meet.jit.si/external_api.js"></script>
+<script>
+  const domain = "meet.jit.si";
+  const options = {
+    roomName: "{{ room_name }}",
+    parentNode: document.querySelector("#jitsi-container"),
+    userInfo: {
+      displayName: "{{ session.get('user_name') }}"
+    }
+  };
+  const api = new JitsiMeetExternalAPI(domain, options);
+
+  const chatBox = document.getElementById("chat-messages");
+  const chatInput = document.getElementById("chat-input");
+  const chatSend = document.getElementById("chat-send");
+
+  function renderMessages(items) {
+    chatBox.innerHTML = "";
+    items.forEach((msg) => {
+      const el = document.createElement("div");
+      el.className = "mb-2";
+      el.innerHTML = `<strong>${msg.author}</strong> <span class="text-muted">${msg.created_at}</span><div>${msg.message}</div>`;
+      chatBox.appendChild(el);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function fetchChat() {
+    const res = await fetch("{{ url_for('consulta.consulta_chat', appointment_id=agendamento['id']) }}");
+    if (res.ok) {
+      const data = await res.json();
+      renderMessages(data);
+    }
+  }
+
+  chatSend.addEventListener("click", async () => {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    await fetch("{{ url_for('consulta.consulta_chat', appointment_id=agendamento['id']) }}", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({message: msg})
+    });
+    chatInput.value = "";
+    fetchChat();
+  });
+
+  setInterval(fetchChat, 2000);
+  fetchChat();
+</script>
+{% endblock %}

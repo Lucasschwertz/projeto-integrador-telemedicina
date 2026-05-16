@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Clinica{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="section-card fade-up d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <h2 class="mb-1">Painel da clinica</h2>
+        <p class="text-muted mb-0">Controle usuarios, documentos e configuracoes.</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{{ url_for('usuarios.listar_usuarios') }}">
+          <i class="fas fa-users me-1"></i>Gerenciar usuarios
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Usuarios ativos</p>
+          <h3 class="mb-0">{{ usuarios }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-user-check"></i></span>
+      </div>
+      <small class="text-muted">Cadastros atuais.</small>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Documentos enviados</p>
+          <h3 class="mb-0">{{ documentos }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-file-upload"></i></span>
+      </div>
+      <small class="text-muted">Arquivos da unidade.</small>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">% Laudados</p>
+          <h3 class="mb-0">{{ percentual_laudado }}%</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-chart-line"></i></span>
+      </div>
+      <small class="text-muted">Indice de laudos concluidos.</small>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Solicitacoes</p>
+          <h3 class="mb-0">{{ contatos }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-headset"></i></span>
+      </div>
+      <small class="text-muted">Pedidos recentes.</small>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title">Acoes rapidas</h4>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('documentos.visualizar_documentos') }}">
+          <i class="fas fa-folder-open me-1"></i>Visualizar documentos
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('documentos.solicitacoes_contato') }}">
+          <i class="fas fa-headset me-1"></i>Solicitacoes de contato
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('relatorios.relatorios') }}">
+          <i class="fas fa-chart-pie me-1"></i>Relatorios
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('perfil.perfil') }}">
+          <i class="fas fa-user-cog me-1"></i>Editar perfil
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('notifications.listar_notificacoes') }}">
+          <i class="fas fa-bell me-1"></i>Notificacoes
+        </a>
+        <a class="btn btn-outline-danger" href="{{ url_for('auth.logout') }}">
+          <i class="fas fa-sign-out-alt me-1"></i>Sair
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Documentos por mes</h4>
+      <canvas id="docsChartClinica" height="180"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const ctxClinica = document.getElementById('docsChartClinica');
+  if (ctxClinica) {
+    new Chart(ctxClinica, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_labels|tojson }},
+        datasets: [{
+          label: 'Documentos',
+          data: {{ chart_values|tojson }},
+          backgroundColor: 'rgba(14, 116, 144, 0.65)'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

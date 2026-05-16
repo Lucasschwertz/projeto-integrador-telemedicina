@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Empresas{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Nova empresa</h2>
+      <form method="POST" class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Nome</label>
+          <input type="text" name="nome" class="form-control" required>
+        </div>
+        <div class="col-12">
+          <label class="form-label">CNPJ</label>
+          <input type="text" name="cnpj" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Plano</label>
+          <input type="text" name="plano" class="form-control" placeholder="Starter, Pro" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select" required>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Subdominio</label>
+          <input type="text" name="subdomain" class="form-control" placeholder="clinica1" required>
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="section-card fade-up">
+      <h3 class="mb-3">Empresas cadastradas</h3>
+      {% if empresas %}
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Plano</th>
+                <th>Status</th>
+                <th>Subdominio</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for e in empresas %}
+                <tr>
+                  <td>{{ e['nome'] }}</td>
+                  <td>{{ e['cnpj'] }}</td>
+                  <td>{{ e['plano'] }}</td>
+                  <td>{{ e['status'] }}</td>
+                  <td>{{ e['subdomain'] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhuma empresa cadastrada.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

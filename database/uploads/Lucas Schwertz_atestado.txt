@@ -1,0 +1,9 @@
+ATESTADO MEDICO
+Paciente: Lucas Schwertz
+Medico: Lucas Schwertz
+CRM: 1234567-89
+Data: 24/01/2026
+Dias de afastamento: 3
+
+Observacoes:
+Precisa de Férias!!

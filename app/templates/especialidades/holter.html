@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Holter - Plataforma Telemedicina{% endblock %}
+
+{% block content %}
+<section class="hero fade-up">
+  <div class="hero-card text-center">
+    <span class="icon-badge mb-3"><i class="fas fa-wave-square"></i></span>
+    <h1 class="mb-2">Holter</h1>
+    <p class="lead text-muted">
+      Monitoramento continuo do ritmo cardiaco por 24h ou mais.
+    </p>
+    <div class="d-flex justify-content-center gap-2">
+      <a href="{{ url_for('documentos.solicitar_contato') }}" class="btn btn-primary">
+        <i class="fas fa-stethoscope me-1"></i>Solicitar atendimento
+      </a>
+      <a href="{{ url_for('home.home') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Voltar ao inicio
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="row g-4">
+  <div class="col-lg-6">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Quando e indicado</h4>
+      <ul class="mb-0">
+        <li>Investigacao de arritmias intermitentes</li>
+        <li>Analise de palpitacoes e tonturas</li>
+        <li>Acompanhamento de pacientes cardiacos</li>
+        <li>Ajuste de tratamentos</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Como funciona</h4>
+      <p class="text-muted mb-0">
+        Um dispositivo portatil registra o eletrocardiograma durante o dia e noite para avaliacao detalhada.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

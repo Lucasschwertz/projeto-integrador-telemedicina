@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Pagamento pendente{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="section-card fade-up text-center">
+      <h2 class="mb-2">Pagamento pendente</h2>
+      <p class="text-muted">Seu pagamento ainda nao foi confirmado.</p>
+      <a href="{{ url_for('dashboard.dashboard_paciente') }}" class="btn btn-outline-primary">Voltar ao dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

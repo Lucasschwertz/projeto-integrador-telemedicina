@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="LuminaCare">
+  <rect width="256" height="256" rx="56" fill="#0ea5a6"/>
+  <g fill="#f7f5ef">
+    <circle cx="96" cy="96" r="40"/>
+    <circle cx="168" cy="96" r="40" opacity="0.85"/>
+    <rect x="68" y="136" width="120" height="72" rx="28" opacity="0.9"/>
+  </g>
+  <path d="M120 92h16v16h16v16h-16v16h-16v-16h-16v-16h16z" fill="#0b5f61"/>
+</svg>

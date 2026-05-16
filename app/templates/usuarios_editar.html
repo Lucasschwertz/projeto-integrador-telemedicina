@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Editar usuario{% endblock %}
+{% block content %}
+
+<div class="section-card fade-up">
+  <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2 mb-3">
+    <div>
+      <h2 class="mb-1">Editar usuario</h2>
+      <p class="text-muted mb-0">Atualize os dados do usuario selecionado.</p>
+    </div>
+    <span class="icon-badge"><i class="fas fa-user-edit"></i></span>
+  </div>
+
+  <form method="POST" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Nome completo</label>
+      <input type="text" name="nome" class="form-control" value="{{ usuario[1] }}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" value="{{ usuario[2] }}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Senha</label>
+      <input type="text" name="senha" class="form-control" value="{{ usuario[3] }}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Perfil</label>
+      <select name="perfil" class="form-select" required>
+        <option value="Paciente" {% if usuario[4] == 'Paciente' %}selected{% endif %}>Paciente</option>
+        <option value="Medico" {% if usuario[4] == 'Medico' %}selected{% endif %}>Medico</option>
+        <option value="Clinica/Admin" {% if usuario[4] == 'Clinica/Admin' %}selected{% endif %}>Clinica/Admin</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">CRM (apenas medico)</label>
+      <input type="text" name="crm" class="form-control" value="{{ usuario[6] }}">
+    </div>
+    <div class="col-12 d-flex justify-content-end gap-2">
+      <a href="{{ url_for('usuarios.listar_usuarios') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i>Voltar
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save me-1"></i>Salvar alteracoes
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

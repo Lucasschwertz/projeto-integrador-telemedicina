@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Perfil do usuario{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Editar perfil</h2>
+      <form method="POST" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nome</label>
+          <input type="text" name="nome" value="{{ dados['nome'] }}" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Senha</label>
+          <input type="password" name="senha" value="{{ dados['senha'] }}" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Telefone</label>
+          <input type="text" name="telefone" value="{{ dados['telefone'] }}" class="form-control">
+        </div>
+        {% if session.get('user_role', '')|lower == 'medico' %}
+        <div class="col-md-6">
+          <label class="form-label">CRM</label>
+          <input type="text" name="crm" value="{{ dados['crm'] }}" class="form-control">
+        </div>
+        {% endif %}
+        <div class="col-md-6">
+          <label class="form-label">Sexo</label>
+          <select name="sexo" class="form-select">
+            <option value="">Sexo</option>
+            <option value="Masculino" {% if dados['sexo'] == "Masculino" %}selected{% endif %}>Masculino</option>
+            <option value="Feminino" {% if dados['sexo'] == "Feminino" %}selected{% endif %}>Feminino</option>
+            <option value="Outro" {% if dados['sexo'] == "Outro" %}selected{% endif %}>Outro</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Data de nascimento</label>
+          <input type="date" name="data_nascimento" value="{{ dados['data_nascimento'] }}" class="form-control">
+        </div>
+        <div class="col-md-8">
+          <label class="form-label">Rua</label>
+          <input type="text" name="rua" value="{{ dados['rua'] }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Numero</label>
+          <input type="text" name="numero" value="{{ dados['numero'] }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Complemento</label>
+          <input type="text" name="complemento" value="{{ dados['complemento'] }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Cidade</label>
+          <input type="text" name="cidade" value="{{ dados['cidade'] }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Estado</label>
+          <input type="text" name="estado" value="{{ dados['estado'] }}" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">CEP</label>
+          <input type="text" name="cep" value="{{ dados['cep'] }}" class="form-control">
+        </div>
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline-secondary">Voltar</a>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

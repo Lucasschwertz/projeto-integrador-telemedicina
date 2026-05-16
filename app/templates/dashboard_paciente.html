@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Paciente{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="section-card fade-up d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <h2 class="mb-1">Area do paciente</h2>
+        <p class="text-muted mb-0">Acesse seus exames e documentos digitais.</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{{ url_for('documentos.visualizar_documentos') }}">
+          <i class="fas fa-download me-1"></i>Baixar documentos
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Documentos disponiveis</p>
+          <h3 class="mb-0">{{ documentos }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-folder-open"></i></span>
+      </div>
+      <small class="text-muted">Veja seus exames recentes.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Exames enviados</p>
+          <h3 class="mb-0">{{ exames }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-flask"></i></span>
+      </div>
+      <small class="text-muted">Arquivos recebidos pela plataforma.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Atualizacoes</p>
+          <h3 class="mb-0">{{ notificacoes }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-bell"></i></span>
+      </div>
+      <small class="text-muted">Avisos e novas mensagens.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">% Laudados</p>
+          <h3 class="mb-0">{{ percentual_laudado }}%</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-chart-line"></i></span>
+      </div>
+      <small class="text-muted">Documentos com laudo.</small>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title">Acoes rapidas</h4>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('perfil.perfil') }}">
+          <i class="fas fa-user-cog me-1"></i>Editar perfil
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('documentos.timeline_paciente') }}">
+          <i class="fas fa-stream me-1"></i>Timeline
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('agenda.agenda_paciente') }}">
+          <i class="fas fa-calendar-check me-1"></i>Agendar consulta
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('notifications.listar_notificacoes') }}">
+          <i class="fas fa-bell me-1"></i>Notificacoes
+        </a>
+        <a class="btn btn-outline-danger" href="{{ url_for('auth.logout') }}">
+          <i class="fas fa-sign-out-alt me-1"></i>Sair
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Documentos por mes</h4>
+      <canvas id="docsChartPaciente" height="180"></canvas>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Consultas confirmadas</h4>
+      {% if consultas %}
+        <div class="list-group">
+          {% for c in consultas %}
+            <div class="list-group-item d-flex flex-column flex-md-row justify-content-between gap-2">
+              <div>
+                <div class="fw-semibold">{{ c['doctor_name'] }} - {{ c['tipo'] }}</div>
+                <small class="text-muted">{{ c['date'] }} {{ c['time'] }} | Pagamento: {{ c['payment_status'] or 'aguardando' }}</small>
+              </div>
+              <div class="d-flex gap-2">
+                {% if not c['pago'] %}
+                  <a href="{{ url_for('pagamento.pagar_consulta', appointment_id=c['id']) }}" class="btn btn-outline-primary btn-sm">
+                    Pagar agora
+                  </a>
+                {% else %}
+                  <a href="{{ url_for('consulta.consulta', appointment_id=c['id']) }}" class="btn btn-outline-primary btn-sm">
+                    Entrar na consulta
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhuma consulta confirmada.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const ctxPaciente = document.getElementById('docsChartPaciente');
+  if (ctxPaciente) {
+    new Chart(ctxPaciente, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_labels|tojson }},
+        datasets: [{
+          label: 'Documentos',
+          data: {{ chart_values|tojson }},
+          backgroundColor: 'rgba(14, 116, 144, 0.65)'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

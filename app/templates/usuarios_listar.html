@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="section-card fade-up">
+  <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3">
+    <div>
+      <h2 class="mb-1">Lista de usuarios</h2>
+      <p class="text-muted mb-0">Gerencie os cadastros da plataforma.</p>
+    </div>
+    <a href="{{ url_for('usuarios.novo_usuario') }}" class="btn btn-primary">
+      <i class="fas fa-user-plus me-1"></i>Novo usuario
+    </a>
+  </div>
+
+  <form method="get" action="{{ url_for('usuarios.listar_usuarios') }}" class="row g-3 mb-4">
+    <div class="col-md-5">
+      <label class="form-label">Busca</label>
+      <input type="text" name="busca" class="form-control" placeholder="Buscar por nome ou email"
+             value="{{ busca }}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Perfil</label>
+      <select name="perfil" class="form-select">
+        <option value="">Todos os perfis</option>
+        <option value="Paciente" {% if perfil == 'Paciente' %}selected{% endif %}>Paciente</option>
+        <option value="Medico" {% if perfil == 'Medico' %}selected{% endif %}>Medico</option>
+        <option value="Clinica/Admin" {% if perfil == 'Clinica/Admin' %}selected{% endif %}>Clinica/Admin</option>
+      </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-outline-primary w-100">
+        <i class="fas fa-filter me-1"></i>Filtrar
+      </button>
+    </div>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Perfil</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u[0] }}</td>
+          <td>{{ u[1] }}</td>
+          <td>{{ u[2] }}</td>
+          <td>{{ u[3] }}</td>
+          <td>
+            <button type="button" class="btn btn-sm btn-outline-info me-1"
+                    data-bs-toggle="modal" data-bs-target="#modalUsuario{{ u[0] }}"
+                    title="Ver detalhes">
+              <i class="fas fa-eye"></i>
+            </button>
+
+            <a href="{{ url_for('usuarios.editar_usuario', user_id=u[0]) }}" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a href="{{ url_for('usuarios.excluir_usuario', user_id=u[0]) }}" class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Tem certeza que deseja excluir este usuario?')" title="Excluir">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-1"></i>Voltar ao dashboard
+    </a>
+    {% if total_paginas > 1 %}
+    <nav aria-label="Paginacao">
+      <ul class="pagination justify-content-center mb-0">
+        {% for p in range(1, total_paginas + 1) %}
+          <li class="page-item {% if p == pagina %}active{% endif %}">
+            <a class="page-link" href="?pagina={{ p }}{% if busca %}&busca={{ busca }}{% endif %}{% if perfil %}&perfil={{ perfil }}{% endif %}">{{ p }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</div>
+
+{% for u in usuarios %}
+<div class="modal fade" id="modalUsuario{{ u[0] }}" tabindex="-1" aria-labelledby="modalLabel{{ u[0] }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalLabel{{ u[0] }}">
+          <i class="fas fa-user me-2"></i>Detalhes do usuario
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>ID:</strong> {{ u[0] }}</li>
+          <li class="list-group-item"><strong>Nome:</strong> {{ u[1] }}</li>
+          <li class="list-group-item"><strong>Email:</strong> {{ u[2] }}</li>
+          <li class="list-group-item"><strong>Perfil:</strong> {{ u[3] }}</li>
+          <li class="list-group-item"><strong>CPF/CNPJ:</strong> {{ u[4] }}</li>
+          <li class="list-group-item"><strong>CRM:</strong> {{ u[5] or '-' }}</li>
+          <li class="list-group-item"><strong>Telefone:</strong> {{ u[6] }}</li>
+          <li class="list-group-item"><strong>Sexo:</strong> {{ u[7] }}</li>
+          <li class="list-group-item"><strong>Data nascimento:</strong> {{ u[8] }}</li>
+          <li class="list-group-item"><strong>Endereco:</strong>
+            {{ u[9] }}, {{ u[10] }} {{ u[11] }} - {{ u[12] }}/{{ u[13] }} ({{ u[14] }})
+          </li>
+          <li class="list-group-item"><strong>CEP:</strong> {{ u[14] }}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Agendar consulta{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Horarios disponiveis</h2>
+      {% if horarios %}
+        <form method="POST" class="list-group">
+          {% for h in horarios %}
+            <label class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <div class="fw-semibold">{{ h['doctor_name'] }} - {{ h['tipo'] }}</div>
+                <small class="text-muted">{{ h['date'] }} {{ h['time'] }}</small>
+              </div>
+              <input type="radio" name="slot_id" value="{{ h['id'] }}">
+            </label>
+          {% endfor %}
+          <div class="mt-3 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Agendar consulta</button>
+          </div>
+        </form>
+      {% else %}
+        <p class="text-muted mb-0">Nenhum horario disponivel no momento.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="section-card fade-up">
+      <h3 class="mb-3">Meus agendamentos</h3>
+      {% if agendamentos %}
+        <div class="list-group">
+          {% for a in agendamentos %}
+            <div class="list-group-item">
+              <div class="fw-semibold">{{ a['doctor_name'] }} - {{ a['tipo'] }}</div>
+              <small class="text-muted">{{ a['date'] }} {{ a['time'] }} | {{ a['status'] }}</small>
+              {% if a['status'] == 'confirmado' %}
+                <div class="mt-2">
+                  <span class="badge bg-light text-dark">Pagamento: {{ a['payment_status'] or 'aguardando' }}</span>
+                  {% if not a['pago'] %}
+                    <a href="{{ url_for('pagamento.pagar_consulta', appointment_id=a['id']) }}" class="btn btn-outline-primary btn-sm ms-2">
+                      Pagar agora
+                    </a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhum agendamento ainda.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

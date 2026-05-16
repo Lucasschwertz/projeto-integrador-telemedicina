@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Cadastro{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="section-card fade-up">
+      <h2 class="mb-3">Criar conta</h2>
+      <form method="POST" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nome completo</label>
+          <input type="text" name="nome" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Senha</label>
+          <input type="password" name="senha" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Perfil</label>
+          <select name="perfil" class="form-select" required>
+            <option value="">Selecione o perfil</option>
+            <option value="Paciente">Paciente</option>
+            <option value="Medico">Medico</option>
+            <option value="Clinica/Admin">Clinica/Admin</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">CPF ou CNPJ</label>
+          <input type="text" name="cpf_cnpj" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">CRM (apenas medico)</label>
+          <input type="text" name="crm" class="form-control" placeholder="Ex: 12345-SP">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Telefone</label>
+          <input type="text" name="telefone" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Sexo</label>
+          <select name="sexo" class="form-select">
+            <option value="">Sexo</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Data de nascimento</label>
+          <input type="date" name="data_nascimento" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">CEP</label>
+          <input type="text" name="cep" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Rua</label>
+          <input type="text" name="rua" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Numero</label>
+          <input type="text" name="numero" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Complemento</label>
+          <input type="text" name="complemento" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Cidade</label>
+          <input type="text" name="cidade" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Estado</label>
+          <input type="text" name="estado" class="form-control">
+        </div>
+        <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary">Ja tenho conta</a>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

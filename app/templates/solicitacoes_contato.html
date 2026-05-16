@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Solicitacoes de contato{% endblock %}
+{% block content %}
+<div class="section-card fade-up">
+  <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3">
+    <div>
+      <h2 class="mb-1">Solicitacoes de contato</h2>
+      <p class="text-muted mb-0">Mensagens recebidas pelo formulario da home.</p>
+    </div>
+    <a href="{{ url_for('dashboard.dashboard_clinica') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+  </div>
+
+  {% if solicitacoes %}
+    <div class="list-group">
+      {% for s in solicitacoes %}
+        <div class="list-group-item">
+          <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+            <div>
+              <div class="fw-semibold">{{ s['name'] }} - {{ s['email'] }}</div>
+              <small class="text-muted">{{ s['created_at'] }}</small>
+              <div class="mt-2">{{ s['message'] }}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted mb-0">Nenhuma solicitacao registrada.</p>
+  {% endif %}
+</div>
+{% endblock %}

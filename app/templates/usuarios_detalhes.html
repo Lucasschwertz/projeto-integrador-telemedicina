@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes do usuario{% endblock %}
+{% block content %}
+
+<div class="section-card fade-up">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <span class="icon-badge"><i class="fas fa-user"></i></span>
+    <div>
+      <h2 class="mb-1">Detalhes do usuario</h2>
+      <p class="text-muted mb-0">Informacoes completas do cadastro.</p>
+    </div>
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item"><strong>ID:</strong> {{ usuario[0] }}</li>
+    <li class="list-group-item"><strong>Nome:</strong> {{ usuario[1] }}</li>
+    <li class="list-group-item"><strong>Email:</strong> {{ usuario[2] }}</li>
+    <li class="list-group-item"><strong>Perfil:</strong> {{ usuario[4] }}</li>
+    <li class="list-group-item"><strong>CPF/CNPJ:</strong> {{ usuario[5] }}</li>
+    <li class="list-group-item"><strong>CRM:</strong> {{ usuario[6] or '-' }}</li>
+    <li class="list-group-item"><strong>Telefone:</strong> {{ usuario[7] }}</li>
+    <li class="list-group-item"><strong>Sexo:</strong> {{ usuario[8] }}</li>
+    <li class="list-group-item"><strong>Data nascimento:</strong> {{ usuario[9] }}</li>
+    <li class="list-group-item"><strong>Endereco:</strong> {{ usuario[10] }}, {{ usuario[11] }} {{ usuario[12] }} - {{ usuario[13] }}/{{ usuario[14] }} ({{ usuario[15] }})</li>
+  </ul>
+
+  <div class="mt-4">
+    <a href="{{ url_for('usuarios.listar_usuarios') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Medico{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="section-card fade-up d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <h2 class="mb-1">Area do medico</h2>
+        <p class="text-muted mb-0">Gerencie exames, laudos e documentos emitidos.</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{{ url_for('documentos.upload_exame') }}">
+          <i class="fas fa-upload me-1"></i>Enviar exame
+        </a>
+        <a class="btn btn-outline-primary" href="{{ url_for('documentos.emitir_documento') }}">
+          <i class="fas fa-file-signature me-1"></i>Emitir documento
+        </a>
+        <a class="btn btn-outline-primary" href="{{ url_for('documentos.emitir_atestado') }}">
+          <i class="fas fa-notes-medical me-1"></i>Emitir atestado
+        </a>
+        <a class="btn btn-outline-primary" href="{{ url_for('documentos.emitir_receita_assinada') }}">
+          <i class="fas fa-file-prescription me-1"></i>Receita assinada
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('agenda.agenda_medico') }}">
+          <i class="fas fa-calendar-plus me-1"></i>Agenda
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Exames recebidos</p>
+          <h3 class="mb-0">{{ exames }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-flask"></i></span>
+      </div>
+      <small class="text-muted">Atualize conforme sua rotina.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Documentos emitidos</p>
+          <h3 class="mb-0">{{ documentos }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-file-medical"></i></span>
+      </div>
+      <small class="text-muted">Laudos, receitas e atestados.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Pendentes</p>
+          <h3 class="mb-0">{{ pendentes }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-hourglass-half"></i></span>
+      </div>
+      <small class="text-muted">Documentos aguardando laudo.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">% Laudados</p>
+          <h3 class="mb-0">{{ percentual_laudado }}%</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-chart-line"></i></span>
+      </div>
+      <small class="text-muted">Indice de documentos laudados.</small>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="text-muted mb-1">Pacientes ativos</p>
+          <h3 class="mb-0">{{ pacientes }}</h3>
+        </div>
+        <span class="icon-badge"><i class="fas fa-user-friends"></i></span>
+      </div>
+      <small class="text-muted">Acompanhe seus atendimentos.</small>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title">Acoes rapidas</h4>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('documentos.historico_medico') }}">
+          <i class="fas fa-history me-1"></i>Historico de documentos
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('perfil.perfil') }}">
+          <i class="fas fa-user-cog me-1"></i>Editar perfil
+        </a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('notifications.listar_notificacoes') }}">
+          <i class="fas fa-bell me-1"></i>Notificacoes
+        </a>
+        <a class="btn btn-outline-danger" href="{{ url_for('auth.logout') }}">
+          <i class="fas fa-sign-out-alt me-1"></i>Sair
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Documentos pendentes</h4>
+      {% if pendentes_lista %}
+        <div class="list-group">
+          {% for doc in pendentes_lista %}
+            <div class="list-group-item d-flex flex-column flex-md-row justify-content-between gap-2">
+              <div>
+                <div class="fw-semibold">{{ doc['patient_name'] }} - {{ doc['doc_type'] }}</div>
+                <small class="text-muted">{{ doc['created_at'] }}</small>
+              </div>
+              <div class="d-flex gap-2">
+                <form method="POST" action="{{ url_for('documentos.atualizar_status', doc_id=doc['id']) }}">
+                  <input type="hidden" name="status" value="laudado">
+                  <button class="btn btn-outline-success btn-sm">Laudar</button>
+                </form>
+                <form method="POST" action="{{ url_for('documentos.atualizar_status', doc_id=doc['id']) }}">
+                  <input type="hidden" name="status" value="entregue">
+                  <button class="btn btn-outline-dark btn-sm">Entregar</button>
+                </form>
+                <a href="{{ url_for('documentos.detalhe_documento', doc_id=doc['id']) }}" class="btn btn-outline-secondary btn-sm">
+                  Ver
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhum documento pendente.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Consultas confirmadas</h4>
+      {% if consultas %}
+        <div class="list-group">
+          {% for c in consultas %}
+            <div class="list-group-item d-flex flex-column flex-md-row justify-content-between gap-2">
+              <div>
+                <div class="fw-semibold">{{ c['patient_name'] }} - {{ c['tipo'] }}</div>
+                <small class="text-muted">{{ c['date'] }} {{ c['time'] }} | Pago: {{ 'sim' if c['pago'] else 'nao' }}</small>
+              </div>
+              {% if c['pago'] %}
+                <a href="{{ url_for('consulta.consulta', appointment_id=c['id']) }}" class="btn btn-outline-primary btn-sm">
+                  Iniciar consulta
+                </a>
+              {% else %}
+                <span class="badge bg-warning text-dark align-self-center">Pagamento pendente</span>
+                <button class="btn btn-outline-secondary btn-sm" disabled>Iniciar consulta</button>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhuma consulta confirmada.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="section-card">
+      <h4 class="card-title mb-3">Documentos por mes</h4>
+      <canvas id="docsChartMedico" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const ctx = document.getElementById('docsChartMedico');
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_labels|tojson }},
+        datasets: [{
+          label: 'Documentos',
+          data: {{ chart_values|tojson }},
+          backgroundColor: 'rgba(14, 116, 144, 0.65)'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

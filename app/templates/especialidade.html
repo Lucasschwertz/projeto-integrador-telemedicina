@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tipo }} - Especialidade{% endblock %}
+
+{% block content %}
+<div class="hero fade-up">
+  <div class="hero-card text-center">
+    <span class="icon-badge mb-3"><i class="fas fa-heartbeat"></i></span>
+    <h2 class="mb-3">{{ tipo }}</h2>
+    <p class="lead text-muted mb-4">
+      Conteudo completo sobre {{ tipo.lower() }} sera disponibilizado em breve.
+    </p>
+    <a href="{{ url_for('home.home') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
+  </div>
+</div>
+{% endblock %}

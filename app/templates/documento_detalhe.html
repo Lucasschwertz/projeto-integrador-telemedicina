@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Documento{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="section-card fade-up">
+      <div class="d-flex justify-content-between align-items-start gap-2">
+        <div>
+          <h2 class="mb-1">{{ documento['doc_type'] }}</h2>
+          <p class="text-muted mb-0">
+            Paciente: {{ documento['patient_name'] }} | Medico: {{ documento['doctor_name'] }}
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('documentos.visualizar_documentos') }}" class="btn btn-outline-secondary">
+            Voltar
+          </a>
+          <a href="{{ url_for('documentos.download_arquivo', nome_arquivo=documento['filename']) }}" class="btn btn-outline-primary">
+            <i class="fas fa-download me-1"></i>Baixar
+          </a>
+        </div>
+      </div>
+      <hr>
+      <p class="text-muted mb-0">Categoria: {{ documento['category'] }} | {{ documento['created_at'] }}</p>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="section-card">
+      <h4 class="card-title">Comentarios</h4>
+      <form method="POST" class="mb-3">
+        <textarea name="comentario" class="form-control" rows="3" placeholder="Adicionar comentario"></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Enviar</button>
+      </form>
+
+      {% if comentarios %}
+        <div class="d-flex flex-column gap-2">
+          {% for c in comentarios %}
+            <div class="border rounded-3 p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="fw-semibold">{{ c['author_name'] }} - {{ c['author_role'] }}</div>
+                {% if c['is_read'] == 0 %}
+                  <span class="badge bg-primary">Novo</span>
+                {% endif %}
+              </div>
+              <small class="text-muted">{{ c['created_at'] }}</small>
+              <div>{{ c['body'] }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Nenhum comentario ainda.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
